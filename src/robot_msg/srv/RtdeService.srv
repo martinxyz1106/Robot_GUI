@@ -1,0 +1,11 @@
+string seq_no
+string cmd
+
+---
+
+string seq_no
+uint16 response_cd
+string cmd
+string component_cd
+string status_cd
+
