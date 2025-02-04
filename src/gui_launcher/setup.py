@@ -20,7 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'gui = gui_launcher.gui_launch:main'
+            'gui = gui_launcher.gui_launch:main',
+            'client = gui_launcher.robot_client:main'
         ],
     },
 )

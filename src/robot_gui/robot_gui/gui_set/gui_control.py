@@ -10,7 +10,7 @@ from collections import deque
 # from gui_launcher.DBconstants import DBFieldName
 class MyApp(QMainWindow):
     def __init__(self):
-        super().__init__("MYAPP")
+        super().__init__()
         self.ui = Ui_Widget()
         self.ui.setupUi(self)
 
