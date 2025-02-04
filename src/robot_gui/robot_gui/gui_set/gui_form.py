@@ -31,6 +31,11 @@ class Ui_Widget(object):
         self.hold_ice2 = QtWidgets.QPushButton(parent=self.verticalLayoutWidget)
         self.hold_ice2.setObjectName("hold_ice2")
         self.verticalLayout.addWidget(self.hold_ice2)
+
+        self.go_home = QtWidgets.QPushButton(parent=self.verticalLayoutWidget)
+        self.go_home.setObjectName("go_home")
+        self.verticalLayout.addWidget(self.go_home)
+
         self.verticalLayoutWidget_2 = QtWidgets.QWidget(parent=Widget)
         self.verticalLayoutWidget_2.setGeometry(QtCore.QRect(270, 150, 211, 271))
         self.verticalLayoutWidget_2.setObjectName("verticalLayoutWidget_2")
@@ -89,4 +94,5 @@ class Ui_Widget(object):
         self.pickup_bev1.setText(_translate("Widget", "1번 베버리지 머신 컵 빼기"))
         self.pickup_bev2.setText(_translate("Widget", "2번 베버리지 머신 컵 빼기"))
         self.pickup_zone.setText(_translate("Widget", "픽업 존 컵 잡기"))
+        self.go_home.setText(_translate("Widget", "홈 위치로 이동(레일포함)"))
         self.Title.setText(_translate("Widget", "Robot Control GUI"))

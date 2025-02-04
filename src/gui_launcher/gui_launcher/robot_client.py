@@ -15,7 +15,7 @@ class RobotServiceClient(Node):
         self.qos_profile = QoSProfile(depth=25)
         self.client = self.create_client(RobotService, 'robot/service', qos_profile=self.qos_profile)
 
-        self.queue_timer = threading.Timer(interval=1.0, function=self.queue_checker)
+        self.queue_timer = self.create_timer(1.0, self.queue_checker)
         self.pickup_index = 0
         self.robot_queue = []
 
@@ -23,6 +23,7 @@ class RobotServiceClient(Node):
             self.get_logger().info('service not available, waiting again...')
         
         print("Robot Serivce client Setup Complete")
+
     def get_command(self, cmd=None):   
         srv_req = RobotService.Request()
         request_object = RobotRequestObject()
@@ -41,19 +42,27 @@ class RobotServiceClient(Node):
             self.robot_queue.append(srv_req)
 
     def queue_checker(self):
-        if len(self.robot_queue) != 0:
-            srv_req = self.robot_queue.pop()
-            print(f"Serivce Request : {srv_req.cmd}, {srv_req.rail_pos}, {srv_req.par1}")
-            self.send_request(srv_req)
+        try:
+            if len(self.robot_queue) != 0:
+                srv_req = self.robot_queue.pop()
+                print(f"Serivce Request : {srv_req.cmd}, {srv_req.rail_pos}, {srv_req.par1}")
+                self.send_request(srv_req)
             # print(f"Serivce Response : {response.seq_no}, {response.result}")
-        else :
-            print("No Input Data Found")
-
+            else :
+                print("No Input Data Found")
+        except KeyboardInterrupt :
+            raise SystemExit
     def send_request(self, request):
         self.future = self.client.call_async(request)
-        rp.spin_until_future_complete(node = self, future=self.future, timeout_sec=0.5)
+        self.future.add_done_callback(self.serivce_done)
+        # rp.spin_until_future_complete(node = self, future=self.future, timeout_sec=0.5)
         # return self.future.result()
-
+    
+    def serivce_done(self, tmp):
+        if tmp.done():
+            response = tmp.result()
+            print(f"Temp : {type(tmp)}")
+            print(f"Serivce Response : {response.component_cd}, {response.result}")
 # def main(args=None):
 #     rp.init(args=args)
 #     robot_srv_client = RobotServiceClient()

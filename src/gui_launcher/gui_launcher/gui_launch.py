@@ -29,33 +29,44 @@ class GUIlaunch():
 
         # 명령을 처리하는 스레드 시작
         self.queue_thread = threading.Timer(interval=0.1, function=self.process_commands)
-        self.queue_thread.start()
         
         self.executor_thread = threading.Thread(target=self.executor.spin)
+        self.queue_thread.start()
         self.executor_thread.start()
-        
         sys.exit(self.app.exec())
+
         # finally:
         #     # self.executor.shutdown()
         #     # self.queue_thread.join()
         #     # self.executor_thread.join()
         
     def process_commands(self):
-        while True:
-            if self.gui.cmd_list:
-                command = self.gui.cmd_list.popleft()
-                print(f"Input Command Cmd: {command['request_id'], command['no']}")
-                self.robot_client.get_command(command)
-            else :
-                print("GUI Queue is Empty")
-            time.sleep(0.5)  # CPU 사용을 방지하기 위해 약간의 대기시간 추가
-        
+        try:
+            while True:
+                if self.gui.cmd_list:
+                    command = self.gui.cmd_list.popleft()
+                    print(f"Input Command Cmd: {command['request_id'], command['no']}")
+                    self.robot_client.get_command(command)
+            
+                else :
+                    print("GUI Queue is Empty")
+                time.sleep(0.5)  # CPU 사용을 방지하기 위해 약간의 대기시간 추가
+                
+        except KeyboardInterrupt:
+                # self.queue_thread.join()
+                raise SystemExit
 
 def main(args=None):
     rclpy.init(args=args)
     # robot_client = RobotServiceClient()
     gui = GUIlaunch()
-    gui.launch()
+    try:
+        gui.launch()
+    except Exception as error:
+        pass
+    except KeyboardInterrupt :
+        raise SystemExit
+
     # executor = MultiThreadedExecutor()
     # executor.add_node(gui)
     # executor.add_node(gui.robot_client)

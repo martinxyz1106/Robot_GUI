@@ -51,6 +51,13 @@
       </property>
      </widget>
     </item>
+    <item>
+     <widget class="QPushButton" name="go_home">
+      <property name="text">
+       <string>홈 위치로 이동(레일포함)</string>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QWidget" name="verticalLayoutWidget_2">
