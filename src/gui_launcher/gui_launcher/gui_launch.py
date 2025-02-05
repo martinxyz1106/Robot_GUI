@@ -46,8 +46,12 @@ class GUIlaunch():
                 if self.gui.cmd_list:
                     command = self.gui.cmd_list.popleft()
                     print(f"Input Command Cmd: {command['request_id'], command['no']}")
-                    self.robot_client.get_command(command)
-            
+
+                    if (command['request_id'] == 'exit'):
+                        self.queue_thread.cancel()
+                        QApplication.instance().quit()
+                    else :
+                        self.robot_client.get_command(command)
                 else :
                     print("GUI Queue is Empty")
                 time.sleep(0.5)  # CPU 사용을 방지하기 위해 약간의 대기시간 추가
