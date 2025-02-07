@@ -12,7 +12,7 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 class Ui_Widget(object):
     def setupUi(self, Widget):
         Widget.setObjectName("Widget")
-        Widget.resize(635, 685)
+        Widget.resize(634, 685)
         self.verticalLayoutWidget = QtWidgets.QWidget(parent=Widget)
         self.verticalLayoutWidget.setGeometry(QtCore.QRect(20, 150, 211, 391))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
@@ -57,7 +57,7 @@ class Ui_Widget(object):
         self.verticalLayout.addWidget(self.go_home)
 
         self.verticalLayoutWidget_2 = QtWidgets.QWidget(parent=Widget)
-        self.verticalLayoutWidget_2.setGeometry(QtCore.QRect(270, 150, 211, 271))
+        self.verticalLayoutWidget_2.setGeometry(QtCore.QRect(300, 150, 211, 271))
         self.verticalLayoutWidget_2.setObjectName("verticalLayoutWidget_2")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.verticalLayoutWidget_2)
         self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -90,7 +90,7 @@ class Ui_Widget(object):
         self.verticalLayout_2.addWidget(self.pickup_bev2)
 
         self.horizontalLayoutWidget = QtWidgets.QWidget(parent=Widget)
-        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(270, 430, 211, 71))
+        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(300, 430, 211, 71))
         self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
@@ -126,7 +126,7 @@ class Ui_Widget(object):
 
         self.horizontalLayoutWidget_2 = QtWidgets.QWidget(Widget)
         self.horizontalLayoutWidget_2.setObjectName("horizontalLayoutWidget_2")
-        self.horizontalLayoutWidget_2.setGeometry(QtCore.QRect(270, 500, 211, 71))
+        self.horizontalLayoutWidget_2.setGeometry(QtCore.QRect(300, 500, 211, 71))
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget_2)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -144,13 +144,58 @@ class Ui_Widget(object):
         self.horizontalLayout_2.addWidget(self.zone_num_2)
 
         self.ExitButton = QtWidgets.QPushButton(Widget)
-        self.ExitButton.setObjectName(u"ExitButton")
+        self.ExitButton.setObjectName("ExitButton")
         self.ExitButton.setGeometry(QtCore.QRect(490, 60, 111, 51))
         font2 = QtGui.QFont()
         font2.setPointSize(14)
         font2.setBold(True)
         font2.setWeight(75)
         self.ExitButton.setFont(font2)
+
+        self.verticalLayoutWidget_3 = QtWidgets.QWidget(Widget)
+        self.verticalLayoutWidget_3.setObjectName("verticalLayoutWidget_3")
+        self.verticalLayoutWidget_3.setGeometry(QtCore.QRect(20, 560, 211, 121))
+        self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.verticalLayoutWidget_3)
+        self.verticalLayout_3.setObjectName("verticalLayout_3")
+        self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
+        self.unlock_protective = QtWidgets.QPushButton(self.verticalLayoutWidget_3)
+        self.unlock_protective.setObjectName("unlock_protective")
+        sizePolicy1 = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Preferred)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.unlock_protective.sizePolicy().hasHeightForWidth())
+        self.unlock_protective.setSizePolicy(sizePolicy1)
+
+        self.verticalLayout_3.addWidget(self.unlock_protective)
+
+        self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
+        self.cup_back = QtWidgets.QPushButton(self.verticalLayoutWidget_3)
+        self.cup_back.setObjectName("cup_back")
+        sizePolicy2 = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Fixed, QtWidgets.QSizePolicy.Policy.Preferred)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.cup_back.sizePolicy().hasHeightForWidth())
+        self.cup_back.setSizePolicy(sizePolicy2)
+
+        self.horizontalLayout_3.addWidget(self.cup_back)
+
+        self.move_approach = QtWidgets.QPushButton(self.verticalLayoutWidget_3)
+        self.move_approach.setObjectName("move_approach")
+        sizePolicy2.setHeightForWidth(self.move_approach.sizePolicy().hasHeightForWidth())
+        self.move_approach.setSizePolicy(sizePolicy2)
+
+        self.horizontalLayout_3.addWidget(self.move_approach)
+
+        self.move_home = QtWidgets.QPushButton(self.verticalLayoutWidget_3)
+        self.move_home.setObjectName("move_home")
+        sizePolicy2.setHeightForWidth(self.move_home.sizePolicy().hasHeightForWidth())
+        self.move_home.setSizePolicy(sizePolicy2)
+        self.move_home.setSizeIncrement(QtCore.QSize(0, 0))
+
+        self.horizontalLayout_3.addWidget(self.move_home)
+
+        self.verticalLayout_3.addLayout(self.horizontalLayout_3)
 
 
         self.retranslateUi(Widget)
@@ -172,3 +217,8 @@ class Ui_Widget(object):
         self.Title.setText(_translate("Widget", "Robot Control GUI"))
         self.place_zone.setText(_translate("Widget", "픽업존 컵 놓기"))
         self.ExitButton.setText(_translate("Widget", "종료하기"))
+
+        self.unlock_protective.setText(_translate("Widget", "프로텍티브 해제"))
+        self.move_home.setText(_translate("Widget", "Home"))
+        self.move_approach.setText(_translate("Widget", "Approach"))
+        self.cup_back.setText(_translate("Widget", "컵DP 복귀"))

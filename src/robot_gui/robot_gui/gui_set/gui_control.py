@@ -27,6 +27,11 @@ class MyApp(QMainWindow):
         self.ui.hold_ice2.clicked.connect(self.send_pic_ice2)
         self.ui.ExitButton.clicked.connect(self.exit)
         self.ui.go_home.clicked.connect(self.send_go_home)
+        self.ui.move_home.clicked.connect(self.robot_home)
+        self.ui.move_approach.clicked.connect(self.robot_approach)
+        self.ui.cup_back.clicked.connect(self.robot_cup_back)
+        self.ui.unlock_protective.clicked.connect(self.unlock_protective)
+
         self.cmd_list = deque()
     
     @pyqtSlot()
@@ -85,7 +90,25 @@ class MyApp(QMainWindow):
         print("버튼이 눌렸습니다!")
         cmd = {'request_id': 'home', 'no': 1}
         self.cmd_list.appendleft(cmd)
+    def robot_cup_back(self):
+        print("ROBCUP 버튼이 눌렸습니다!")
+        cmd = {'request_id': 'ROBCUP', 'no': 0}
+        self.cmd_list.appendleft(cmd)
         
+    def robot_home(self):
+        print("ROBHOME 버튼이 눌렸습니다!")
+        cmd = {'request_id': 'ROBHOME', 'no': 0}
+        self.cmd_list.appendleft(cmd)
+
+    def robot_approach(self):
+        print("approach 버튼이 눌렸습니다!")
+        cmd = {'request_id': 'APPROACH', 'no': 0}
+        self.cmd_list.appendleft(cmd)
+    
+    def unlock_protective(self):
+        print("unlock_버튼이 눌렸습니다!")
+        cmd = {'request_id': 'UNLOCK_PROTECT', 'no': 0}
+        self.cmd_list.appendleft(cmd)
     def exit(self):
         print("종료 합니다.")
         cmd = {'request_id': 'exit', 'no': 0}
