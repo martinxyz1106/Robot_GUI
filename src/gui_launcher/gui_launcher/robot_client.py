@@ -22,6 +22,8 @@ class RobotServiceClient(Node):
         self.queue_timer = self.create_timer(1.0, self.queue_checker)
         self.pickup_index = 0
         self.robot_queue = []
+        self.dashboard_interface = None
+        self.control_interface = None
         while not self.robot_client.wait_for_service(timeout_sec=1.0):
             self.get_logger().info('service not available, waiting again...')
         
@@ -37,10 +39,12 @@ class RobotServiceClient(Node):
                 # request = RtdeService.Request()
                 
                 
-                
                 self.kill_rtde()
-                self.dashboard_interface = dashboard_client.DashboardClient(RobotServiceClient.RTDE_IP)
-                self.control_interface = rtde_control.RTDEControlInterface(RobotServiceClient.RTDE_IP)
+                if self.dashboard_interface is None:
+
+                    self.dashboard_interface = dashboard_client.DashboardClient(RobotServiceClient.RTDE_IP)
+                    self.control_interface = rtde_control.RTDEControlInterface(RobotServiceClient.RTDE_IP)
+            
                 print("Ur RTDE Control is Connected ?? ")
                 rtde_cmd = cmd[DBFieldName.REQUEST_ID]
                 print(f'USE RTDE CMD : {rtde_cmd}')
@@ -103,9 +107,9 @@ class RobotServiceClient(Node):
                 pid = int(parts[1])
                 pids.append(pid)
 
-        for pid in pids:
-            os.kill(pid, signal.SIGTERM)
-            print(f"PID : {pid} 가 종료되었습니다.")
+        
+        os.kill(pids[0], signal.SIGTERM)
+        print(f"PID : {pids[0]} 가 종료되었습니다.")
 
     def queue_checker(self):
         try:
