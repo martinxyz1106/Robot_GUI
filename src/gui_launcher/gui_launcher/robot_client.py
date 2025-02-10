@@ -8,9 +8,9 @@ from gui_launcher.RobotRequestObject import RobotRequestObject
 from gui_launcher.DBConstants import DBFieldName
 import dashboard_client
 import rtde_control
-import time
+import time 
 import math
-
+import os, signal
 class RobotServiceClient(Node):
     RTDE_IP = '192.168.0.11'
     RTDE_COMMAND = ['UNLOCK_PROTECT','APPROACH','ROBCUP','ROBHOME']
@@ -22,9 +22,6 @@ class RobotServiceClient(Node):
         self.queue_timer = self.create_timer(1.0, self.queue_checker)
         self.pickup_index = 0
         self.robot_queue = []
-        self.dashboard_interface = dashboard_client.DashboardClient(RobotServiceClient.RTDE_IP)
-        self.control_interface = rtde_control.RTDEControlInterface(RobotServiceClient.RTDE_IP)
-                
         while not self.robot_client.wait_for_service(timeout_sec=1.0):
             self.get_logger().info('service not available, waiting again...')
         
@@ -38,7 +35,13 @@ class RobotServiceClient(Node):
 
             if cmd[DBFieldName.REQUEST_ID] in RobotServiceClient.RTDE_COMMAND:
                 # request = RtdeService.Request()
-
+                
+                
+                
+                self.kill_rtde()
+                self.dashboard_interface = dashboard_client.DashboardClient(RobotServiceClient.RTDE_IP)
+                self.control_interface = rtde_control.RTDEControlInterface(RobotServiceClient.RTDE_IP)
+                print("Ur RTDE Control is Connected ?? ")
                 rtde_cmd = cmd[DBFieldName.REQUEST_ID]
                 print(f'USE RTDE CMD : {rtde_cmd}')
                 if rtde_cmd == RTDECOMMAND.APPROACH:
@@ -69,7 +72,7 @@ class RobotServiceClient(Node):
                     self.dashboard_interface.unlockProtectiveStop()
                     self.dashboard_interface.stop()
                     # MayBe Script Play???
-
+                
             else: 
             
                 robot_request = request_object.get_robot_request(cmd[DBFieldName.REQUEST_ID], cmd[DBFieldName.NO])
@@ -84,10 +87,26 @@ class RobotServiceClient(Node):
                 srv_req.par5 = robot_request.param5
                 print(f"{srv_req=}")
                 self.robot_queue.append(srv_req)
+                
     def deg2rad(self, deg):
         rad = 0.0
         rad = deg * math.pi/180
-        
+
+    def kill_rtde(self):
+        output = os.popen('ps -ef | grep Rtde').read()
+        pids = []
+
+        # 출력에서 PID를 추출
+        for line in output.split('\n'):
+            if 'Rtde' in line:
+                parts = line.split()
+                pid = int(parts[1])
+                pids.append(pid)
+
+        for pid in pids:
+            os.kill(pid, signal.SIGTERM)
+            print(f"PID : {pid} 가 종료되었습니다.")
+
     def queue_checker(self):
         try:
             if len(self.robot_queue) != 0:
