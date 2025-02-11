@@ -10,7 +10,7 @@ import dashboard_client
 import rtde_control
 import time 
 import math
-import os, signal
+import os, subprocess, signal
 class RobotServiceClient(Node):
     RTDE_IP = '192.168.0.11'
     RTDE_COMMAND = ['UNLOCK_PROTECT','APPROACH','ROBCUP','ROBHOME']
@@ -39,9 +39,10 @@ class RobotServiceClient(Node):
                 # request = RtdeService.Request()
                 
                 
-                self.kill_rtde()
+                self.kill_rtde_node()
+                self.kill_rtde_port()
                 if self.dashboard_interface is None:
-
+                    
                     self.dashboard_interface = dashboard_client.DashboardClient(RobotServiceClient.RTDE_IP)
                     self.control_interface = rtde_control.RTDEControlInterface(RobotServiceClient.RTDE_IP)
             
@@ -89,6 +90,7 @@ class RobotServiceClient(Node):
                 srv_req.par3 = robot_request.param3
                 srv_req.par4 = robot_request.param4
                 srv_req.par5 = robot_request.param5
+
                 print(f"{srv_req=}")
                 self.robot_queue.append(srv_req)
                 
@@ -96,10 +98,35 @@ class RobotServiceClient(Node):
         rad = 0.0
         rad = deg * math.pi/180
 
-    def kill_rtde(self):
+    def kill_rtde_port(self):
+        pids = []
+        contorl_port = 30004
+        board_port = 29999
+        contorl_result = subprocess.run(['lsof', '-i', f':{contorl_port}'], capture_output=True, text=True)
+        control_lines = contorl_result.stdout.splitlines()
+        if len(control_lines) > 1:
+            pid = control_lines[1].split()[1]
+            pids.append(pid)
+
+        board_result = subprocess.run(['lsof', '-i', f':{board_port}'], capture_output=True, text=True)
+        board_lines = board_result.stdout.splitlines()
+
+        if len(board_lines) > 1:
+            pid = board_lines[1].split()[1]
+            pids.append(pid)
+
+        if pids:
+            contorl_pid = pids[0]
+            board_pid = pids[1]
+            os.system(f'kill -9 {contorl_pid}')
+            print(f"PID : {contorl_pid} 가 종료되었습니다.")
+
+            os.system(f'kill -9 {board_pid}')
+            print(f"PID : {board_pid} 가 종료되었습니다.")
+
+    def kill_rtde_node(self):
         output = os.popen('ps -ef | grep Rtde').read()
         pids = []
-
         # 출력에서 PID를 추출
         for line in output.split('\n'):
             if 'Rtde' in line:
@@ -107,10 +134,13 @@ class RobotServiceClient(Node):
                 pid = int(parts[1])
                 pids.append(pid)
 
-        
-        os.kill(pids[0], signal.SIGTERM)
-        print(f"PID : {pids[0]} 가 종료되었습니다.")
-
+        if pids:
+            node_pid = pids[0]
+            python_pid = pids[1]
+            os.kill(node_pid, signal.SIGTERM)
+            print(f" PID : {node_pid} is Killed")
+            os.kill(python_pid, signal.SIGTERM)
+            print(f" PID : {python_pid} is Killed")
     def queue_checker(self):
         try:
             if len(self.robot_queue) != 0:
@@ -157,6 +187,7 @@ class RobotServiceClient(Node):
 # if __name__ == '__main__':
 #     main()
 class RTDECOMMAND:
+
     UNLOCK_PROTECT= 'UNLOCK_PROTECT'
     APPROACH = 'APPROACH'
     ROBCUP = 'ROBCUP'
