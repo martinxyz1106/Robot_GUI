@@ -20,8 +20,7 @@ class MyApp(QMainWindow):
         self.ui.pickup_bev1.clicked.connect(self.send_pic_bev1)
         self.ui.pickup_bev2.clicked.connect(self.send_pic_bev2)
         self.ui.pickup_zone.clicked.connect(self.send_pick_zone)
-        self.ui.hold_cup2.clicked.connect(self.send_pic_cup2)
-        self.ui.hold_cup1.clicked.connect(self.send_pic_cup1)
+        self.ui.unhold_cup.clicked.connect(self.send_pic_cup)
         self.ui.place_zone.clicked.connect(self.send_place_zone)
         self.ui.hold_ice1.clicked.connect(self.send_pic_ice1)
         self.ui.hold_ice2.clicked.connect(self.send_pic_ice2)
@@ -66,14 +65,10 @@ class MyApp(QMainWindow):
         cmd = {'request_id': 'place_order','no': spin_value-1}
         self.cmd_list.appendleft(cmd)
     
-    def send_pic_cup1(self):
-        print("버튼이 눌렸습니다!")
-        cmd = {'request_id': 'unhold_cup', 'no': 0}
-        self.cmd_list.appendleft(cmd)
-    
-    def send_pic_cup2(self):
-        print("버튼이 눌렸습니다!")
-        cmd = {'request_id': 'unhold_cup', 'no': 1}
+    def send_pic_cup(self):
+        spin_value = self.ui.channel_num.value()
+        print("버튼이 눌렸습니다! SpinBox 값: {spin_value}")
+        cmd = {'request_id': 'unhold_cup', 'no': spin_value-1}
         self.cmd_list.appendleft(cmd)
     
     def send_pic_ice1(self):
