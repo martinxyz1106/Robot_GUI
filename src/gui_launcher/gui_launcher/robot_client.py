@@ -40,9 +40,9 @@ class RobotServiceClient(Node):
                 
                 
                 self.kill_rtde_node()
-                self.kill_rtde_port()
+                
                 if self.dashboard_interface is None:
-                    
+                    self.kill_rtde_port()
                     self.dashboard_interface = dashboard_client.DashboardClient(RobotServiceClient.RTDE_IP)
                     self.control_interface = rtde_control.RTDEControlInterface(RobotServiceClient.RTDE_IP)
             
@@ -108,21 +108,21 @@ class RobotServiceClient(Node):
             pid = control_lines[1].split()[1]
             pids.append(pid)
 
-        board_result = subprocess.run(['lsof', '-i', f':{board_port}'], capture_output=True, text=True)
-        board_lines = board_result.stdout.splitlines()
+        # board_result = subprocess.run(['lsof', '-i', f':{board_port}'], capture_output=True, text=True)
+        # board_lines = board_result.stdout.splitlines()
 
-        if len(board_lines) > 1:
-            pid = board_lines[1].split()[1]
-            pids.append(pid)
+        # if len(board_lines) > 1:
+        #     pid = board_lines[1].split()[1]
+        #     pids.append(pid)
 
         if pids:
             contorl_pid = pids[0]
-            board_pid = pids[1]
+            # board_pid = pids[1]
             os.system(f'kill -9 {contorl_pid}')
             print(f"PID : {contorl_pid} 가 종료되었습니다.")
 
-            os.system(f'kill -9 {board_pid}')
-            print(f"PID : {board_pid} 가 종료되었습니다.")
+            # os.system(f'kill -9 {board_pid}')
+            # print(f"PID : {board_pid} 가 종료되었습니다.")
 
     def kill_rtde_node(self):
         output = os.popen('ps -ef | grep Rtde').read()
@@ -136,11 +136,11 @@ class RobotServiceClient(Node):
 
         if pids:
             node_pid = pids[0]
-            python_pid = pids[1]
+            # python_pid = pids[1]
             os.kill(node_pid, signal.SIGTERM)
             print(f" PID : {node_pid} is Killed")
-            os.kill(python_pid, signal.SIGTERM)
-            print(f" PID : {python_pid} is Killed")
+            # os.kill(python_pid, signal.SIGTERM)
+            # print(f" PID : {python_pid} is Killed")
     def queue_checker(self):
         try:
             if len(self.robot_queue) != 0:
